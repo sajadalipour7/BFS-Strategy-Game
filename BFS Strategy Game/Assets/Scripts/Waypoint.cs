@@ -7,6 +7,11 @@ public class Waypoint : MonoBehaviour
     
     public bool isExplored=false;
     public Waypoint exploredFrom;
+    public bool isPlaceable = true;
+
+    [SerializeField] Tower towerPrefab;
+
+
     Vector2Int gridPos;
     const int gridSize = 10;
     // Start is called before the first frame update
@@ -28,13 +33,24 @@ public class Waypoint : MonoBehaviour
         );
     }
 
-    // consider setting own color in Update()
-    public void SetTopColor(Color color)
+    private void OnMouseOver()
     {
-        MeshRenderer topMeshRenderer=transform.Find("Top").GetComponent<MeshRenderer>();
-        topMeshRenderer.material.color = color;
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (isPlaceable)
+            {
+                Instantiate(towerPrefab, transform.position, Quaternion.identity);
+                isPlaceable = false;
+                //print(gameObject.name + " tower placement");
+            }
+            else
+            {
+                print("Can't place there");
+            }
+            
+        }
     }
 
     // Update is called once per frame
-    
+
 }
