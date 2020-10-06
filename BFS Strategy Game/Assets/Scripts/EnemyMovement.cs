@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    
+    [SerializeField] float movementPeriod = 0.5f;
+    [SerializeField] ParticleSystem goalParticle;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,14 +21,17 @@ public class EnemyMovement : MonoBehaviour
         {
             transform.position = waypoint.transform.position;
             //print("Visiting:" + waypoint);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(movementPeriod);
         }
         //print("Ending patrol");
+        SelfDestruct();
     }
 
-    // Update is called once per frame
-    void Update()
+    void SelfDestruct()
     {
-        
+        var vfx = Instantiate(goalParticle, transform.position, Quaternion.identity);
+        vfx.Play();
+        Destroy(vfx.gameObject, vfx.main.duration);
+        Destroy(gameObject);
     }
 }
